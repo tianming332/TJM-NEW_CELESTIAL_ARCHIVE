@@ -1,0 +1,18 @@
+{
+  "name": "new-celestial-archive-material",
+  "private": true,
+  "version": "0.14.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "check:shader": "vgpu check src/crystal.wgsl && vgpu check src/space.wgsl && vgpu check src/composite.wgsl"
+  },
+  "dependencies": {
+    "vgpu": "0.3.1"
+  },
+  "devDependencies": {
+    "@webgpu/types": "^0.1.69",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3"
+  }
+}

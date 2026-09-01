@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#090707" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>新-天象图库 / 02 地球尺度 · EARTH RECORD</title>
+  <link rel="icon" href="assets/project-logo.png" />
+  <link rel="stylesheet" href="css/earth.css?v=earth-r14-20260831" />
+</head>
+<body data-ui-size="fine" data-view="surface" data-build="EARTH-R14-20260831" data-projection="flat">
+  <canvas id="earthCanvas" aria-label="全球陨石记录交互图"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="topbar ui">
+    <a class="brand" href="../cosmic/index.html?v=earth-r14-20260831">
+      <img src="assets/project-logo.png" alt="新-天象图库 Logo" />
+      <span><strong>新-天象图库</strong><small>NEW CELESTIAL ARCHIVE · 02 / EARTH</small></span>
+    </a>
+    <div class="build-tag" title="当前地球部分版本">EARTH DATA · R14 · 2026.08.31</div>
+
+    <nav class="mode-nav" aria-label="地球尺度阅读方式">
+      <button class="active" data-view="surface"><span>01</span><b>地表</b><small>SURFACE</small></button>
+      <button data-view="record"><span>02</span><b>记录</b><small>RECORD</small></button>
+      <button data-view="time"><span>03</span><b>时间</b><small>TIME</small></button>
+      <button data-view="distribution"><span>04</span><b>分布</b><small>DISTRIBUTION</small></button>
+      <button data-view="impact"><span>05</span><b>撞击</b><small>IMPACT</small></button>
+    </nav>
+
+    <div class="top-right">
+      <div class="tools">
+        <button id="explainBtn">解读 <small>EXPLAIN</small></button>
+        <button id="filterBtn">筛选 <small>FILTER</small></button>
+        <button id="langBtn">语言 <small>LANGUAGE</small></button>
+        <button id="sizeBtn">尺寸 <small>UI SIZE</small></button>
+        <button id="dataBtn">资料 <small>DATA</small></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="scale-nav ui" aria-label="三个信息尺度">
+    <span>观察尺度 <small>OBSERVATION SCALE</small></span>
+    <a href="../cosmic/index.html?v=earth-r14-20260831"><b>01</b><strong>宇宙</strong><small>COSMIC</small></a>
+    <i></i>
+    <a class="active" href="index.html?v=earth-r14-20260831"><b>02</b><strong>地球</strong><small>EARTH</small></a>
+    <i></i>
+    <a href="../material/index.html?v=material-r14-20260831"><b>03</b><strong>物质</strong><small>MATERIAL</small></a>
+  </nav>
+
+  <main class="stage">
+    <div class="stage-title ui">
+      <span id="modeIndex">01</span>
+      <div><b id="modeTitle">地表档案</b><small id="modeSub">SURFACE / 从原始二维图表进入可交互地球投影</small></div>
+    </div>
+
+    <div class="grid-key ui" aria-label="经纬网说明">
+      <span>经纬网</span><b>15° / 30°</b><small>GRATICULE · LAT / LON</small>
+    </div>
+
+    <section class="statement ui">
+      <p>02 / 地球尺度</p>
+      <h1>陨石不是<br>地图上的点</h1>
+      <span>它是一套由入射、坠落、发现、时间、地点、质量与人类记录共同构成的地表档案。</span>
+    </section>
+
+    <section class="stats ui" id="statsPanel">
+      <div><small>DATASET</small><b id="statTotal">45,716</b><span>总记录 / RECORDS</span></div>
+      <div><small>GEOLOCATED</small><b id="statGeo">—</b><span>有效坐标 / COORDS</span></div>
+      <div><small>FELL</small><b id="statFell">—</b><span>观测坠落 / OBSERVED</span></div>
+      <div><small>FOUND</small><b id="statFound">—</b><span>后来发现 / RECOVERED</span></div>
+    </section>
+
+    <div class="legend ui">
+      <span><i class="terrain"></i>大陆轮廓 <small>NATURAL EARTH</small></span>
+      <span><i class="warm"></i>陨石记录 <small>METEORITE</small></span>
+      <span><i class="fell"></i>FELL <small>观测坠落</small></span>
+      <span><i class="found"></i>FOUND <small>后来发现</small></span>
+      <span><i class="cool"></i>撞击结构 <small>IMPACT</small></span>
+    </div>
+
+    <div class="projection-hint ui" id="projectionHint">
+      <b id="projectionTitle">滚轮切换投影</b><span id="projectionCopy">拖拽查看地区细节；平面状态隐藏外环</span><small id="projectionMode">WHEEL · FLAT ↔ GLOBE / DRAG · EXPLORE</small>
+    </div>
+
+    <div class="source-fragment flow-fragment ui">
+      <span>原稿矢量 / FALL PROCESS</span>
+      <img src="assets/source-flow.svg" alt="原稿中的陨石落下流程矢量" />
+    </div>
+    <div class="source-fragment legend-fragment ui">
+      <span>原稿矢量 / MASS · DIAMETER GRADES</span>
+      <img src="assets/source-legends.svg" alt="原稿中的质量与撞击坑直径等级矢量" />
+    </div>
+
+    <button id="selectedChip" class="selected-chip ui" hidden>
+      <small id="selectedChipType">SELECTED RECORD</small><b id="selectedChipName">—</b><span id="selectedChipMeta">打开档案 ↙</span>
+    </button>
+  </main>
+
+  <footer class="timeline ui" id="timeline">
+    <button id="playBtn" class="play">▶</button>
+    <div class="time-read"><span>人类记录时间 <small>RECORD YEAR</small></span><b id="yearRead">2013</b><em id="timeEventRead">NASA LEGACY DATASET SNAPSHOT</em></div>
+    <div class="timeline-axis"><input id="yearRange" type="range" min="1800" max="2013" value="2013" step="1" /><div><span>1800</span><span>1850</span><span>1900</span><span>1950</span><span>2000</span><span>2013</span></div></div>
+    <div class="speed-set" id="speedSet"><button class="active" data-speed="1">1×</button><button data-speed="5">5×</button><button data-speed="20">20×</button></div>
+    <button id="traceBtn" class="trace-btn">坠落轨迹 <small>FALL TRACE</small></button>
+    <button id="resetBtn">复位</button>
+  </footer>
+
+  <aside class="drawer explain ui" id="explainPanel">
+    <div class="drawer-head"><span>图表解读 <small>VISUAL GUIDE</small></span><button data-close>×</button></div>
+    <div class="source-poster">
+      <div class="source-head"><b>原始图表 / ORIGINAL CHART</b><small>1755 × 2481 · POSTER RATIO</small></div>
+      <div class="source-figure" id="sourceFigure">
+        <img src="assets/earth-explain-poster.jpg" alt="陨石降落分布图原稿" title="点击放大" />
+        <button class="source-hotspot hotspot-earth" data-jump="surface"><span>01 中央世界图 / SURFACE</span></button>
+        <button class="source-hotspot hotspot-record" data-jump="record"><span>02 陨石记录 / RECORD</span></button>
+        <button class="source-hotspot hotspot-impact" data-jump="impact"><span>03 撞击结构 / IMPACT</span></button>
+      </div>
+      <div class="source-hotlinks"><button data-jump="surface">中央世界图</button><button data-jump="record">陨石记录</button><button data-jump="impact">撞击结构</button></div>
+    </div>
+    <div class="explain-copy">
+      <section><h3>这张图整体在表达什么？</h3><p><b>快速理解：</b>它把“陨石抵达地球以后留下的记录”压缩进一个圆形世界图。左侧强调大型陨石记录，右侧强调巨大撞击结构，中间的点阵地球提供地理位置。</p><details><summary>深入了解</summary><p>网页不把这张图理解成普通地图，而是把它拆成“地理位置、记录方式、时间、质量与撞击结构”五个可分别阅读的数据层。</p></details></section>
+      <section><h3>FELL 和 FOUND 为什么不同？</h3><p><b>Fell</b> 表示坠落过程被观察到；<b>Found</b> 表示陨石是在地表后来被发现。网页只给 Fell 绘制入射短轨迹，Found 直接从地表出现。</p></section>
+      <section><h3>为什么有些地方记录特别密集？</h3><p>这里呈现的是<b>人类记录中的陨石</b>，不是地球真实发生过的全部坠落事件。搜索活动、人口、地表保存条件、沙漠与南极考察都会影响我们“看见”多少记录。</p></section>
+      <section><h3>颜色、大小和形状怎么看？</h3><p>暖色表示陨石记录；冷色表示撞击结构。陨石点大小按质量的对数尺度压缩；Fell 使用菱形/轨迹，Found 使用圆点。原稿中的大型陨石质量等级仍以左侧环形语言保留。</p></section>
+      <section class="legend-reading"><h3>质量与直径图例怎么读？</h3><figure><img src="assets/source-legends.svg" alt="原稿中的质量与撞击坑直径等级图例" /><figcaption>左侧暖色六边形表示陨石质量等级：符号数量越多、颜色越趋近红色，质量越大；中间星形颜色用于 Fell 事件；右侧冷色圆点与竖条表示撞击结构及其直径等级，越偏紫、竖条越多，直径越大。两套等级属于不同数据，不能互相换算。</figcaption></figure></section>
+      <section><h3>为什么“撞击坑”不是“陨石记录”？</h3><p>陨石记录是一件被回收或观测到的天体碎片；撞击结构是地球地质表面保存的撞击遗迹。它们来自不同的数据体系，因此网页在 05 / IMPACT 中独立显示。</p></section>
+      <section><h3>时间增长代表陨石越来越多吗？</h3><p>不一定。时间模式首先表现的是<b>记录数量的累积</b>。它同时反映真实事件、发现活动和记录制度的变化，因此不能直接解释成坠落频率持续增加。</p></section>
+      <section><h3>网页比原图多了什么？</h3><p>原图负责看见整体；网页允许同一条记录在地表投影、Fell/Found、时间累积和数据坐标之间保持身份，并能被选择、筛选和继续进入物质尺度。</p></section>
+      <section><h3>05 / IMPACT 设计注意事项</h3><p>最后板块必须把“回收陨石”与“地质撞击结构”分开：冷色只表达撞击结构，直径与年龄不得套用陨石质量等级；选择结构后先定位地球坐标，再提供进入物质尺度的下一步，不把推测轨迹画成已知事实。</p></section>
+      <section class="glossary"><h3>术语 / GLOSSARY</h3><dl><dt>FELL</dt><dd>被观察到实际坠落的陨石记录。</dd><dt>FOUND</dt><dd>并未观察到坠落，而是在之后被发现的样本。</dd><dt>MASS</dt><dd>数据集中记录的质量，网页使用对数尺度压缩视觉差异。</dd><dt>RECCLASS</dt><dd>Meteoritical Society 数据中的陨石分类字段。</dd><dt>IMPACT STRUCTURE</dt><dd>经地质证据确认的地球撞击结构。</dd></dl></section>
+    </div>
+  </aside>
+
+  <aside class="drawer filter ui" id="filterPanel">
+    <div class="drawer-head"><span>数据筛选 <small>DATA FILTER</small></span><button data-close>×</button></div>
+    <section><label>记录类型 <small>RECORD TYPE</small></label><div class="choice-grid" id="fallFilter"><button class="active" data-fall="all">全部 ALL</button><button data-fall="Fell">FELL</button><button data-fall="Found">FOUND</button></div></section>
+    <section><label>质量等级 <small>MASS / LOG SCALE</small></label><div class="choice-grid mass-grid" id="massFilter"><button class="active" data-mass="all">全部</button><button data-mass="0">&lt; 1 kg</button><button data-mass="1">1–100 kg</button><button data-mass="2">0.1–1 t</button><button data-mass="3">1–10 t</button><button data-mass="4">≥ 10 t</button></div></section>
+    <section><label>物质大类 <small>CLASS FAMILY</small></label><div class="choice-grid" id="classFilter"><button class="active" data-class="all">全部</button><button data-class="Chondrite">球粒陨石</button><button data-class="Achondrite">无球粒</button><button data-class="Iron">铁陨石</button><button data-class="Stony-Iron">石铁</button><button data-class="Other">其他</button></div></section>
+    <section><label>坐标 <small>LOCATION</small></label><p class="filter-note">主画面只绘制具有有效经纬度的记录。数据总数仍保留在统计中。</p></section>
+    <button id="filterReset" class="wide-btn">恢复全部 / RESET FILTER</button>
+  </aside>
+
+  <aside class="drawer language ui" id="langPanel">
+    <div class="drawer-head"><span>语言 <small>LANGUAGE</small></span><button data-close>×</button></div>
+    <p class="panel-lead">切换界面的主叙事语言。数据名称、正式分类和单位保持原始形式。</p>
+    <div class="lang-list" id="languageSet"><button class="active" data-lang="zh">中文 <small>CHINESE</small></button><button data-lang="ja">日本語 <small>JAPANESE</small></button><button data-lang="en">English <small>ENGLISH</small></button></div>
+  </aside>
+
+  <aside class="drawer size ui" id="sizePanel">
+    <div class="drawer-head"><span>界面尺寸 <small>UI SIZE</small></span><button data-close>×</button></div>
+    <p class="panel-lead">只改变界面文字、按钮和板块，不缩放中央数据图。</p>
+    <div class="size-list" id="sizeSet"><button class="active" data-size="fine"><b>精细</b><small>100%</small></button><button data-size="standard"><b>标准</b><small>115%</small></button><button data-size="comfortable"><b>舒适</b><small>130%</small></button><button data-size="large"><b>大号</b><small>145%</small></button></div>
+  </aside>
+
+  <aside class="drawer data ui" id="dataPanel">
+    <div class="drawer-head"><span>数据与来源 <small>DATA / SOURCES</small></span><button data-close>×</button></div>
+    <p class="panel-lead">本页将原始 AI 图作为视觉母体，同时把“回收陨石、空中火球、撞击结构”分成三个不能混用的数据层。</p>
+    <div class="data-stack" aria-label="地球尺度数据库结构">
+      <div><small>01 / RECOVERED OBJECT</small><b>陨石记录</b><span>名称、分类、质量、Fell / Found、记录年份与坐标。</span></div>
+      <div><small>02 / ATMOSPHERIC EVENT</small><b>火球与入射</b><span>峰值亮度、位置、高度、辐射能量与估算撞击能量；作为后续动态数据层，不与回收陨石直接等同。</span></div>
+      <div><small>03 / GEOLOGICAL TRACE</small><b>撞击结构</b><span>经地质证据确认的结构、直径、年龄与位置。</span></div>
+    </div>
+    <div class="source-list">
+      <a href="https://data.nasa.gov/dataset/meteorite-landings-api" target="_blank" rel="noreferrer"><b>NASA Open Data — Meteorite Landings API</b><span>当前可视化本地化 45,716 条 legacy snapshot；原始体系来自 The Meteoritical Society。</span></a>
+      <a href="https://www.lpi.usra.edu/meteor/" target="_blank" rel="noreferrer"><b>Meteoritical Bulletin Database</b><span>陨石名称、分类、正式状态、年份及 Fell / Find 记录的主数据库。</span></a>
+      <a href="https://ssd-api.jpl.nasa.gov/doc/fireball.html" target="_blank" rel="noreferrer"><b>NASA/JPL CNEOS — Fireball Data API</b><span>大气层火球/火流星事件；适合未来加入真实入射高度、能量与速度，不替代陨石回收记录。</span></a>
+      <a href="https://www.passc.net/EarthImpactDatabase/New%20website_05-2018/Index.html" target="_blank" rel="noreferrer"><b>Earth Impact Database</b><span>确认的地球撞击结构；本原型先使用原稿中出现的代表性结构。</span></a>
+      <a href="https://www.naturalearthdata.com/downloads/110m-physical-vectors/" target="_blank" rel="noreferrer"><b>Natural Earth — 1:110m Land</b><span>本地化的低分辨率大陆与海岸线几何，用于平面地图到球体的连续投影。</span></a>
+    </div>
+    <div class="data-note"><b>DATA SNAPSHOT</b><span>NASA legacy CSV：45,716 records，其中 32,186 条具有可绘制坐标；本地可视化忽略缺失坐标与 (0,0) 占位坐标。时间模式上限按该快照的 2013 年设置。</span></div>
+    <div class="data-note"><b>SOURCE CHART</b><span>《陨石降落分布图2.ai》中的圆形世界、左右环带、质量/直径分级与落下流程被作为本页视觉结构直接引用和扩展。</span></div>
+  </aside>
+
+  <aside class="drawer inspector ui" id="inspector">
+    <div class="drawer-head"><span>记录档案 <small>OBJECT INSPECTOR</small></span><button data-close>×</button></div>
+    <div id="objectType" class="object-kicker">—</div>
+    <h2 id="objectName">选择一个对象</h2>
+    <div id="objectMeta" class="object-meta"></div>
+    <div class="object-actions"><button id="locateBtn">定位 <small>LOCATE</small></button><button id="sameClassBtn">仅显示同类 <small>SAME CLASS</small></button><button id="samePeriodBtn">同期记录 <small>SAME PERIOD</small></button><a href="../material/index.html?v=material-r14-20260831">进入物质尺度 ↗ <small>MATERIAL</small></a></div>
+  </aside>
+
+  <div class="lightbox" id="lightbox" hidden><button id="lightboxClose">×</button><div><img src="assets/earth-explain-poster.jpg" alt="原始图表放大" /><span>滚轮浏览请使用浏览器缩放 · ESC 关闭</span></div></div>
+
+  <script src="data/meteorites.js?v=earth-r14-20260831"></script>
+  <script src="js/earth.js?v=earth-r14-20260831"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "build": "EARTH_RECORD_03_REFINED",
+  "verified_on": "2026-08-28",
+  "datasets": [
+    {
+      "id": "meteorite_landings_legacy",
+      "role": "recovered_object",
+      "source": "NASA Open Data — Meteorite Landings API",
+      "source_url": "https://data.nasa.gov/dataset/meteorite-landings-api",
+      "upstream": "The Meteoritical Society / Meteoritical Bulletin Database",
+      "snapshot_max_year": 2013,
+      "total_records": 45716,
+      "geolocated_records": 32186,
+      "filters": ["missing coordinates", "0,0 placeholder coordinates"]
+    },
+    {
+      "id": "representative_impact_structures",
+      "role": "geological_trace",
+      "source": "Earth Impact Database",
+      "source_url": "https://www.passc.net/EarthImpactDatabase/New%20website_05-2018/Index.html",
+      "records_in_interface": 8,
+      "scope": "Representative structures selected from the source AI chart; not a complete global inventory"
+    },
+    {
+      "id": "natural_earth_land_110m",
+      "role": "basemap_geometry",
+      "source": "Natural Earth",
+      "source_url": "https://www.naturalearthdata.com/downloads/110m-physical-vectors/",
+      "local_file": "ne_110m_land.geojson",
+      "features": 127
+    }
+  ],
+  "candidate_datasets": [
+    {
+      "id": "cneos_fireballs",
+      "role": "atmospheric_event",
+      "source": "NASA/JPL CNEOS Fireball Data API",
+      "source_url": "https://ssd-api.jpl.nasa.gov/doc/fireball.html",
+      "integration_status": "documented_not_merged"
+    }
+  ]
+}

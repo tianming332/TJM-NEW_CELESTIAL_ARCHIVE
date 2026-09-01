@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0808" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>新-天象图库 / 03 物质尺度 · 晶体结构观测</title>
+  <link rel="icon" href="assets/project-logo.png" />
+  <link rel="stylesheet" href="css/material.css?v=material-r14-20260831-studio7" />
+</head>
+<body class="hide-grid" data-ui-size="fine" data-mode="sample" data-render="loading">
+  <canvas id="crystalCanvas" aria-label="八类透明晶体实时观测画面"></canvas>
+
+  <header class="topbar ui">
+    <a class="brand" href="../cosmic/index.html?v=earth-r14-20260831">
+      <img src="assets/project-logo.png" alt="新-天象图库 Logo" />
+      <span><strong data-i18n="brand">新-天象图库</strong><small>NEW CELESTIAL ARCHIVE · 03 / MATERIAL</small></span>
+    </a>
+    <nav id="modeNav" class="mode-nav" aria-label="微观观察模式">
+      <button class="active" data-mode="sample"><span>01</span><b data-i18n="modeSample">样本</b><small>SAMPLE</small></button>
+      <button data-mode="composition"><span>02</span><b data-i18n="modeComposition">成分</b><small>COMPOSITION</small></button>
+      <button data-mode="spectrum"><span>03</span><b data-i18n="modeSpectrum">光谱</b><small>SPECTRUM</small></button>
+      <button data-mode="crystal"><span>04</span><b data-i18n="modeCrystal">晶系</b><small>CRYSTAL</small></button>
+      <button data-mode="compare"><span>05</span><b data-i18n="modeCompare">对照</b><small>COMPARE</small></button>
+    </nav>
+    <span class="build-tag">MATERIAL R14 <small>2026.08.31</small></span>
+    <div class="top-tools">
+      <button data-panel="camera"><b data-i18n="camera">视角</b><small>CAMERA</small></button>
+      <button data-panel="layers"><b data-i18n="layers">图层</b><small>LAYERS</small></button>
+      <button data-panel="explain"><b data-i18n="explain">解读</b><small>EXPLAIN</small></button>
+      <button data-panel="filter"><b data-i18n="filter">筛选</b><small>FILTER</small></button>
+      <button data-panel="language"><b data-i18n="language">语言</b><small>LANGUAGE</small></button>
+      <button data-panel="size"><b data-i18n="size">尺寸</b><small>UI SIZE</small></button>
+      <button data-panel="data"><b data-i18n="data">资料</b><small>DATA</small></button>
+    </div>
+  </header>
+
+  <nav class="scale-nav ui" aria-label="三个信息尺度">
+    <span><b data-i18n="scale">观察尺度</b><small>OBSERVATION SCALE</small></span>
+    <a href="../cosmic/index.html?v=earth-r14-20260831"><b>01</b><strong data-i18n="cosmic">宇宙</strong><small>COSMIC</small></a><i></i>
+    <a href="../earth/index.html?v=earth-r14-20260831"><b>02</b><strong data-i18n="earth">地球</strong><small>EARTH</small></a><i></i>
+    <a class="active" href="index.html?v=material-r14-20260831"><b>03</b><strong data-i18n="material">物质</strong><small>MATERIAL</small></a>
+  </nav>
+
+  <main class="material-stage">
+    <section class="stage-copy ui">
+      <p class="section-index"><span>03</span> / MATERIAL ARCHIVE</p>
+      <h1 data-i18n="headline">把陨石继续放大<br />直到看见晶体</h1>
+      <p class="subline" data-i18n="intro">颜色、晶系与透光不是装饰，它们共同组成一块陨石的微观档案。</p>
+      <button id="focusToggle" class="stage-rule" type="button" aria-expanded="true" aria-controls="typeRail materialInspector">
+        <i></i><span><b id="activeTypeName">等轴晶体</b><small id="activeTypeCode">ISOMETRIC · STL 01</small></span>
+        <em><span data-i18n="collapsePanels">收起两侧</span><small>FOCUS ↗</small></em>
+      </button>
+      <div id="typeRail" class="type-rail" aria-label="八类晶体模型"></div>
+    </section>
+
+    <section id="crystalLab" class="crystal-lab" aria-label="晶体实验台">
+      <div class="lab-grid" aria-hidden="true"></div>
+      <div class="lab-axis axis-x" aria-hidden="true"><span>−X</span><span>+X</span></div>
+      <div class="lab-axis axis-y" aria-hidden="true"><span>+Y</span><span>−Y</span></div>
+      <div id="mineralRing" class="mineral-ring" aria-label="陨石矿物图标目录"></div>
+      <div class="ring-scale" aria-hidden="true"><span>0°</span><span>90°</span><span>180°</span><span>270°</span></div>
+      <div class="core-reticle" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="interaction-hint ui"><b data-i18n="dragHint">拖动旋转 · 滚轮推进 · 点击外环切换矿物</b><small>DRAG · WHEEL · SELECT MINERAL</small></div>
+      <output id="renderStatus" class="render-status">STL · PARSING 8 CLUSTERS</output>
+      <output id="sunStatus" class="sun-status">LIGHT 000° · OFFSCREEN</output>
+    </section>
+
+    <aside id="materialInspector" class="inspector ui" aria-live="polite">
+      <div class="inspector-head"><span data-i18n="selected">当前选中</span><small>SELECTED MATERIAL</small></div>
+      <div class="material-no" id="mineralNumber">01 / 50</div>
+      <h2 id="mineralName">HEXAGONAL DIAMOND</h2><p id="mineralCn">六方金刚石</p>
+      <div class="spec-grid">
+        <div><span data-i18n="system">晶体类别</span><b id="specSystem">等轴晶体</b><small>CRYSTAL FORM</small></div>
+        <div><span data-i18n="color">海报色相</span><b id="specColor">#7D5AC8</b><small>POSTER COLOR</small></div>
+        <div><span data-i18n="transmission">透光率</span><b id="specTransmission">72%</b><small>VISUAL SIM.</small></div>
+        <div><span data-i18n="refraction">折射率</span><b id="specIor">1.54</b><small>VISUAL SIM.</small></div>
+      </div>
+      <section id="modeDetail" class="mode-detail" aria-live="polite"></section>
+      <p class="simulation-note" data-i18n="simulationNote">透光率、折射率及代表波长为网页视觉模拟参数，不作为矿物学测量数据。</p>
+      <button id="pinBtn" class="outline-action"><span data-i18n="pin">固定到对照</span><small>PIN TO COMPARE ↗</small></button>
+    </aside>
+  </main>
+
+  <footer class="control-deck ui">
+    <button id="playBtn" class="play active" aria-label="暂停或播放晶体旋转"><b>Ⅱ</b><small>AUTO ROTATE</small></button>
+    <div class="deck-title"><span data-i18n="optics">光学模拟</span><b>VGPU · STL CRYSTAL / OFFSCREEN LIGHT</b><small id="modeCaption">01 SAMPLE / 单体材质观察</small></div>
+    <label><span data-i18n="transmission">透光率</span><output id="transmissionOut">72%</output><input id="transmissionRange" type="range" min="12" max="96" value="72" /></label>
+    <label><span data-i18n="refraction">折射率</span><output id="iorOut">1.54</output><input id="iorRange" type="range" min="110" max="220" value="154" /></label>
+    <label><span data-i18n="dispersion">色散</span><output id="dispersionOut">0.34</output><input id="dispersionRange" type="range" min="0" max="100" value="34" /></label>
+    <label><span data-i18n="wavelength">代表波长</span><output id="wavelengthOut">461 nm</output><input id="wavelengthRange" type="range" min="380" max="720" value="461" /></label>
+    <button id="compareBtn"><span data-i18n="compare">对照</span><small>COMPARE</small></button>
+    <button id="resetBtn"><span data-i18n="reset">复位</span><small>RESET</small></button>
+  </footer>
+
+  <aside class="drawer ui" data-drawer="camera"><div class="drawer-head"><span data-i18n="camera">视角</span><small>CAMERA PRESETS</small><button data-close>×</button></div><p class="drawer-lead" data-i18n="cameraLead">不同视角对应不同的晶面阅读方式。</p><div id="cameraPresets" class="preset-grid"><button class="active" data-camera="instrument"><b>01 仪器</b><small>INSTRUMENT</small></button><button data-camera="front"><b>02 正视</b><small>FRONT</small></button><button data-camera="edge"><b>03 晶棱</b><small>FACET</small></button><button data-camera="macro"><b>04 微距</b><small>MACRO</small></button></div></aside>
+
+  <aside class="drawer ui" data-drawer="layers"><div class="drawer-head"><span data-i18n="layers">图层</span><small>DATA LAYERS</small><button data-close>×</button></div><p class="drawer-lead" data-i18n="layersLead">把海报中的视觉变量拆开，单独阅读。</p><div id="layerSet" class="toggle-list"><button class="active" data-layer="ring"><i></i><b data-i18n="layerRing">矿物外环</b><small>MINERAL RING</small></button><button data-layer="grid"><i></i><b data-i18n="layerGrid">晶格坐标</b><small>LATTICE GRID</small></button><button class="active" data-layer="labels"><i></i><b data-i18n="layerLabels">文字标记</b><small>LABELS</small></button><button class="active" data-layer="optics"><i></i><b data-i18n="layerOptics">光学色散</b><small>OPTICS</small></button><button class="active" data-layer="rays"><i></i><b data-i18n="layerRays">射线</b><small>WHITE → SPECTRUM</small></button><button class="active" data-layer="light"><i></i><b data-i18n="layerLight">光源</b><small>OFFSCREEN LIGHT</small></button><button data-layer="global-light"><i></i><b data-i18n="layerGlobal">全局灯</b><small>GLOBAL FILL</small></button><button data-layer="paper"><i></i><b data-i18n="layerPaper">白纸背景</b><small>PAPER TEXTURE</small></button></div></aside>
+
+  <aside class="drawer wide ui" data-drawer="explain">
+    <div class="drawer-head"><span data-i18n="explain">图表解读</span><small>VISUAL LOGIC</small><button data-close>×</button></div>
+    <p class="drawer-lead emphasis" data-i18n="explainLead">原海报负责看见整体；网页负责进入单个晶体并比较它们。</p>
+    <figure class="source-poster"><img src="assets/meteorite-chart-04.jpg" alt="陨石成分原始海报" /><figcaption data-i18n="posterCaption">陨石成分图 / 原始海报比例 3508 × 4962</figcaption></figure>
+    <div class="explain-grid"><div><b data-i18n="explainIconTitle">外环图标</b><span data-i18n="explainIcon">每个几何图标代表一种陨石矿物；点击后把对应色相、晶体形态和光学参数送入中央模型。</span></div><div><b data-i18n="explainColorTitle">色相与代表波长</b><span data-i18n="explainColor">无法为每种矿物指定一个固定可见波长；网页把原稿色相匹配为代表波长和色纯度，用于驱动光束与粒子，不改变矿物身份。</span></div><div><b data-i18n="explainCoreTitle">中央晶体</b><span data-i18n="explainCore">中央展示直接读取 8晶体.stl，并按模型在文件中的空间位置拆成八个真实网格；透明、折射与色散由网页材质实时计算。</span></div><div><b data-i18n="explainBoundaryTitle">数据边界</b><span data-i18n="explainBoundary">矿物真实光学特征是随波长变化的完整光谱。本页的透光、折射、色散与代表波长均为视觉模拟，不是矿物学实测数据库。</span></div></div>
+    <figure class="source-catalog"><img src="assets/source-crystal-catalog.png" alt="晶体平面图标与名称对照" /><figcaption data-i18n="catalogCaption">平面晶体图标与英文名称对照</figcaption></figure>
+  </aside>
+
+  <aside class="drawer ui" data-drawer="filter"><div class="drawer-head"><span data-i18n="filter">筛选</span><small>MATERIAL FILTER</small><button data-close>×</button></div><p class="drawer-lead" data-i18n="filterLead">按八类源模型或海报色系缩小外环目录。</p><div id="filterTypes" class="filter-grid"></div><button id="clearFilter" class="drawer-action" data-i18n="showAll">显示全部 / SHOW ALL</button></aside>
+  <aside class="drawer ui" data-drawer="language"><div class="drawer-head"><span data-i18n="language">语言</span><small>LANGUAGE</small><button data-close>×</button></div><div id="languageSet" class="language-list"><button class="active" data-lang="zh"><b>中文</b><small>CHINESE</small></button><button data-lang="ja"><b>日本語</b><small>JAPANESE</small></button><button data-lang="en"><b>English</b><small>ENGLISH</small></button></div></aside>
+  <aside class="drawer ui" data-drawer="size"><div class="drawer-head"><span data-i18n="size">尺寸</span><small>UI SIZE</small><button data-close>×</button></div><p class="drawer-lead" data-i18n="sizeLead">只改变界面信息，不缩放中央晶体。</p><div id="sizeSet" class="size-list"><button class="active" data-size="fine"><b>精细</b><small>100%</small></button><button data-size="standard"><b>标准</b><small>115%</small></button><button data-size="comfortable"><b>舒适</b><small>130%</small></button><button data-size="large"><b>大号</b><small>145%</small></button></div></aside>
+
+  <aside class="drawer ui" data-drawer="data">
+    <div class="drawer-head"><span data-i18n="data">资料</span><small>DATA / SOURCES</small><button data-close>×</button></div>
+    <p class="drawer-lead" data-i18n="dataLead">唯一三维模型源为 8晶体.stl；网页将其中八个空间分组对应到海报的八类晶体。</p>
+    <div class="reference-list"><a href="https://github.com/vercel-labs/vgpu/pull/356" target="_blank" rel="noreferrer"><b>Vercel Labs / vgpu · Prism Hero</b><span>白光、色散光束、HDR 与尘埃粒子视觉逻辑参考。MIT License。</span></a><a href="https://www.usgs.gov/labs/spectroscopy-lab/usgs-spectral-library" target="_blank" rel="noreferrer"><b>USGS Spectral Library</b><span>矿物真实光学信息以随波长变化的反射光谱记录，而非单一固定波长。</span></a><a href="models/model-manifest.json" target="_blank"><b>8晶体.stl 分组清单</b><span>同一 STL 文件内八个空间网格的固定映射。</span></a><a href="MATERIAL_MICRO_MODULE_DESIGN_SPEC.md" target="_blank"><b>微观板块设计规范</b><span>三个尺度共用按钮、翻译、版本与数据边界。</span></a></div>
+    <h3>唯一源文件 / ONE SOURCE · EIGHT MESHES</h3><ol class="model-list"><li>8晶体.stl / CLUSTER 01 · ISOMETRIC</li><li>8晶体.stl / CLUSTER 02 · HEXAGONAL</li><li>8晶体.stl / CLUSTER 03 · TETRAGONAL</li><li>8晶体.stl / CLUSTER 04 · TRIGONAL</li><li>8晶体.stl / CLUSTER 05 · MONOCLINIC</li><li>8晶体.stl / CLUSTER 06 · ORTHORHOMBIC</li><li>8晶体.stl / CLUSTER 07 · TRICLINIC</li><li>8晶体.stl / CLUSTER 08 · SOURCE SQUARE</li></ol>
+  </aside>
+
+  <div id="toast" class="toast ui" role="status"></div>
+  <script type="module" src="js/material-vgpu.js?v=material-r14-20260831-studio7"></script>
+</body>
+</html>

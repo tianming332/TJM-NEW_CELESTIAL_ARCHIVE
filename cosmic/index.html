@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0808" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>新-天象图库 06.2 / 宇宙尺度 · 小行星空间观测</title>
+  <link rel="icon" href="assets/project-logo.png" />
+  <link rel="stylesheet" href="css/styles.css?v=earth-r14-20260831" />
+</head>
+<body data-ui-size="fine">
+  <canvas id="field" aria-label="小行星空间观测系统"></canvas>
+  <canvas id="exposure" aria-hidden="true"></canvas>
+
+  <section id="intro" class="intro">
+    <img class="intro-logo" src="assets/project-logo.png" alt="" aria-hidden="true" />
+    <div class="intro-copy">
+      <p class="kicker">新-天象图库 / NEW CELESTIAL ARCHIVE</p>
+      <h1>小行星<br>空间观测系统</h1>
+      <p class="en">ASTEROID SPATIAL OBSERVATORY</p>
+      <p class="desc">以原始图表为视觉母体，把平面中难以同时表达的空间、轨道、族群、光谱与时间关系逐层打开。</p>
+      <button id="enterBtn">进入观测 <b>ENTER ↗</b></button>
+      <button id="skipBtn" class="text-btn">跳过引导 / SKIP</button>
+    </div>
+  </section>
+
+  <header class="topbar ui">
+    <button class="brand" id="brandReset" aria-label="恢复原始视角">
+      <img class="brand-logo" src="assets/project-logo.png" alt="新-天象图库 Logo" />
+      <span><strong>新-天象图库</strong><small>NEW CELESTIAL ARCHIVE / 06.2 · COSMIC</small></span>
+    </button><span class="local-badge">LOCAL DATA · TOOL DRAWERS · V06.2</span>
+
+    <nav class="view-nav" aria-label="观察模式">
+      <button class="active" data-view="atlas"><span>01</span><b>天象</b><small>ATLAS</small></button>
+      <button data-view="orbit"><span>02</span><b>轨道</b><small>ORBIT</small></button>
+      <button data-view="group"><span>03</span><b>族群</b><small>GROUP</small></button>
+      <button data-view="spectrum"><span>04</span><b>光谱</b><small>SPECTRUM</small></button>
+      <button data-view="time"><span>05</span><b>时间</b><small>TIME</small></button>
+    </nav>
+
+    <div class="top-tools">
+      <button id="cameraBtn">视角 <small>CAMERA</small></button>
+      <button id="layersBtn">图层 <small>LAYERS</small></button>
+      <button id="explainBtn">解读 <small>EXPLAIN</small></button>
+      <button id="filterBtn">筛选 <small>FILTER</small></button>
+      <button id="languageBtn">语言 <small>LANGUAGE</small></button>
+      <button id="sizeBtn">尺寸 <small>UI SIZE</small></button>
+      <button id="refsBtn">资料 <small>DATA</small></button>
+    </div>
+  </header>
+
+  <aside id="filterPanel" class="drawer filter ui">
+    <div class="drawer-head"><span>数据筛选 <small>DATA FILTER</small></span><button data-close="filter">×</button></div>
+    <section>
+      <label>动力学区域 / 族群 <small>DYNAMICAL GROUP</small></label>
+      <div id="groupFilters" class="filter-list"></div>
+    </section>
+    <section>
+      <label>光谱 / 图形分类 <small>SPECTRAL / GLYPH</small></label>
+      <div id="typeFilters" class="type-grid"></div>
+    </section>
+    <section>
+      <label>颜色编码 <small>COLOR ENCODING</small></label>
+      <div class="segmented" id="colorMode">
+        <button data-color="group">族群</button>
+        <button class="active" data-color="type">光谱类型</button>
+      </div>
+    </section>
+    <section>
+      <div class="range-head"><label>最小直径 <small>MIN DIAMETER</small></label><output id="diamOut">0 km</output></div>
+      <input id="diamRange" type="range" min="0" max="250" value="0" step="5" />
+    </section>
+    <p class="note">图形形状继承原 AI 分类语言；默认颜色对应光谱/类型。族群颜色仅在分析时临时启用，避免视觉变量冲突。</p>
+  </aside>
+
+  <aside id="languagePanel" class="drawer language ui">
+    <div class="drawer-head"><span>语言 <small>LANGUAGE</small></span><button data-close="language">×</button></div>
+    <p class="panel-lead">切换界面的主叙事语言。数据编号、天体正式名称与单位保持原始形式。</p>
+    <div id="languageSet" class="language-list">
+      <button class="active" data-lang="zh"><b>中文</b><small>CHINESE</small><span>中文为主，英文辅助。</span></button>
+      <button data-lang="ja"><b>日本語</b><small>JAPANESE</small><span>日本語を主表示として切り替えます。</span></button>
+      <button data-lang="en"><b>English</b><small>ENGLISH</small><span>Switch the interface to English.</span></button>
+    </div>
+  </aside>
+
+  <aside id="sizePanel" class="drawer ui-size-panel ui">
+    <div class="drawer-head"><span>界面尺寸 <small>UI SIZE</small></span><button data-close="size">×</button></div>
+    <p class="panel-lead">只改变界面文字、按钮和板块，不缩放中央数据图。</p>
+    <div class="size-list" id="sizeSet"><button class="active" data-size="fine"><b>精细</b><small>100%</small></button><button data-size="standard"><b>标准</b><small>115%</small></button><button data-size="comfortable"><b>舒适</b><small>130%</small></button><button data-size="large"><b>大号</b><small>145%</small></button></div>
+  </aside>
+
+  <aside id="objectPanel" class="drawer object ui">
+    <div class="drawer-head"><span>天体档案 <small>OBJECT ARCHIVE</small></span><button id="closeObject">×</button></div>
+    <div id="objectId" class="object-id">—</div>
+    <h2 id="objectName">选择一个天体</h2>
+    <div id="objectTags" class="tags"></div>
+    <div id="metrics" class="metrics"></div>
+    <div class="object-actions">
+      <button id="focusBtn">聚焦天体 <small>FOCUS</small></button>
+      <button id="traceBtn">仅显示轨迹 <small>TRACE</small></button>
+      <button id="objectOrbitBtn">进入轨道 <small>ORBIT VIEW</small></button>
+      <button id="objectClearBtn">取消选择 <small>CLEAR</small></button>
+    </div>
+  </aside>
+
+  <button id="selectedChip" class="selected-chip ui" aria-label="重新打开所选天体档案">
+    <small>SELECTED OBJECT</small><b>—</b><span>打开档案 ↙</span>
+  </button>
+
+  <aside id="cameraPanel" class="drawer camera ui">
+    <div class="drawer-head"><span>视角预设 <small>CAMERA PRESETS</small></span><button data-close="camera">×</button></div>
+    <p class="panel-lead">视角不是装饰，而是不同的信息阅读方式。</p>
+    <div id="cameraPresets" class="camera-grid">
+      <button data-camera="original"><b>01 原稿</b><small>ORIGINAL</small><span>回到二维主视觉的正投影视角。</span></button>
+      <button data-camera="instrument" class="active"><b>02 仪器</b><small>INSTRUMENT</small><span>默认斜视，兼顾整体与空间深度。</span></button>
+      <button data-camera="ecliptic"><b>03 黄道侧视</b><small>ECLIPTIC</small><span>压低相机，观察轨道倾角与黄道面。</span></button>
+      <button data-camera="deep"><b>04 深空</b><small>DEEP FIELD</small><span>进入小行星带内部，强调纵深关系。</span></button>
+      <button data-camera="data"><b>05 数据空间</b><small>DATA FIELD</small><span>使用三分之四正交投影：X=轨道距离、Y=反照率、Z=类型。正视会压扁一个维度，因此采用斜视，同时仍可拖拽观察。</span></button>
+      <button data-camera="exposure"><b>06 摄影</b><small>EXPOSURE</small><span>时间模式 + 长曝光构图，用于动态展示。</span></button>
+    </div>
+  </aside>
+
+  <aside id="photoPanel" class="drawer photo ui">
+    <div class="drawer-head"><span>摄影设置 <small>PHOTOGRAPHY</small></span><button data-close="photo">×</button></div>
+    <p class="panel-lead">摄影背景只改变展示氛围，不参与天体数据编码，也不代表这些小行星真实位于该深空影像前方。</p>
+    <details class="photo-fold">
+      <summary><span>背景图像 <small>BACKGROUND</small></span><b id="backgroundCurrent">深黑 / DEEP BLACK</b></summary>
+      <div id="backgroundSet" class="background-grid">
+        <button class="active" data-bg="black"><i class="bg-black"></i><b>深黑</b><small>DEEP BLACK</small></button>
+        <button data-bg="cliffs"><i style="background-image:url('assets/bg-cosmic-cliffs.jpg')"></i><b>宇宙悬崖</b><small>COSMIC CLIFFS</small></button>
+        <button data-bg="deepfield"><i style="background-image:url('assets/bg-webb-deep-field.jpg')"></i><b>韦布深场</b><small>WEBB DEEP FIELD</small></button>
+        <button data-bg="pillars"><i style="background-image:url('assets/bg-pillars.jpg')"></i><b>创生之柱</b><small>PILLARS</small></button>
+        <button data-bg="xdf"><i style="background-image:url('assets/bg-xdf.jpg')"></i><b>极深场</b><small>HUBBLE XDF</small></button>
+      </div>
+    </details>
+    <details class="photo-fold">
+      <summary><span>曝光表现 <small>EXPOSURE LOOK</small></span><b>DISPLAY</b></summary>
+      <div class="photo-note">开启“时间曝光”后，背景、轨迹与辅助线共同构成摄影展示层；关闭后仍回到数据观测状态。</div>
+    </details>
+  </aside>
+
+  <aside id="layersPanel" class="drawer layers ui">
+    <div class="drawer-head"><span>信息图层 <small>DATA LAYERS</small></span><button data-close="layers">×</button></div>
+    <p class="panel-lead">原图把多个维度叠在一张海报中；网页允许单独打开、组合或关闭。</p>
+    <div id="layerControls" class="layer-list">
+      <button class="active" data-layer="objects"><i></i><b>天体</b><small>OBJECTS</small><span>小行星、行星与分类 Glyph。</span></button>
+      <button class="active" data-layer="orbits"><i></i><b>轨道</b><small>ORBITS</small><span>太阳系基准轨道与选中对象轨迹。</span></button>
+      <button data-layer="groups"><i></i><b>族群</b><small>GROUPS</small><span>只在族群分析中强调动力学区域。</span></button>
+      <button data-layer="spectrum"><i></i><b>光谱带</b><small>SPECTRAL BELT</small><span>原稿彩色连续环的可开关视觉转译。</span></button>
+      <button class="active" data-layer="distance"><i></i><b>距离标尺</b><small>DISTANCE</small><span>AU 与角度基准，帮助理解太阳系尺度。</span></button>
+      <button data-layer="wavelength"><i></i><b>观测波段</b><small>WAVELENGTH</small><span>紫外 / 可见光 / 红外的观测维度。</span></button>
+    </div>
+  </aside>
+
+  <aside id="explainPanel" class="drawer explain ui">
+    <div class="drawer-head"><span>图表解读 <small>VISUAL LOGIC</small></span><button data-close="explain">×</button></div>
+    <p class="panel-lead emphasis">原图负责“看见整体”，网页负责“理解关系”。</p>
+    <p class="panel-lead">点击原图中的三个区域，网页会直接切换到对应的观察模式；原图本身保持不变。</p>
+    <div class="explain-chart">
+      <img class="chart-zoomable" src="assets/meteorite-chart-01.jpg" alt="原始小行星分布图" title="点击放大" />
+      <button class="chart-hotspot hotspot-main explain-go" data-go="atlas"><span>01 中央天象 / ATLAS</span></button>
+      <button class="chart-hotspot hotspot-group explain-go" data-go="group"><span>02 族群区域 / GROUP</span></button>
+      <button class="chart-hotspot hotspot-spectrum explain-go" data-go="spectrum"><span>03 光谱分布 / SPECTRUM</span></button>
+    </div>
+    <div class="explain-map compact">
+      <div><b>原图 → 网页</b><span>整体图负责“看见全部”；网页把空间、族群、光谱和时间拆成可操作的阅读层。</span></div>
+      <div><b>轨道与倾角</b><span>原图中的平面圆环，在轨道模式中由 a · e · i · Ω · ω 转译成空间椭圆。</span></div>
+      <div><b>时间维度</b><span>原稿没有充分展开时间；网页用轨道推演与曝光把静态分布变成过程。</span></div>
+    </div>
+    <div class="design-principles" aria-label="网页目标与设计原则">
+      <div><b>网页目标</b><span>原图负责看见整体；网页继续打开平面中难以同时表达的空间、时间、关系与解释。</span></div>
+      <div><b>保留</b><span>黑/深棕空间、白色细线、圆环、刻度、十字轴、彩色数据、几何符号。</span></div>
+      <div><b>空间化</b><span>二维椭圆 → 三维倾斜轨道；分类符号 → 有厚度的数据 Glyph；族群 → 分层分析空间。</span></div>
+      <div><b>性能原则</b><span>默认无全屏 Bloom；远景用点云，中景用符号，只有选中对象启用局部发光。</span></div>
+    </div>
+  </aside>
+
+  <aside id="refsPanel" class="drawer refs ui">
+    <div class="drawer-head"><span>数据与参考 <small>DATA / REFERENCES</small></span><button data-close="refs">×</button></div>
+    <p class="panel-lead">网页运行时读取本地数据；NASA/JPL 用于离线抓取、校验和补充。</p>
+    <div class="reference-list">
+      <a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html" target="_blank" rel="noreferrer"><b>NASA / JPL Small-Body Database</b><span>单个小天体身份、轨道与物理参数。</span></a>
+      <a href="https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html" target="_blank" rel="noreferrer"><b>NASA / JPL SBDB Query API</b><span>批量筛选与本地数据下载。</span></a>
+      <a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noreferrer"><b>NASA / JPL Horizons</b><span>指定时间下的位置、星历与轨迹。</span></a>
+      <a href="https://cneos.jpl.nasa.gov/about/neo_groups.html" target="_blank" rel="noreferrer"><b>NASA / JPL CNEOS — NEO Groups</b><span>近地天体轨道分类说明。</span></a>
+    </div>
+    <h4>摄影背景 / PHOTOGRAPHIC BACKGROUNDS</h4>
+    <p>可选深黑、Webb “Cosmic Cliffs”、Webb First Deep Field、Webb “Pillars of Creation” 与 Hubble eXtreme Deep Field。NASA / ESA / CSA / STScI 等署名随具体影像保留。所有背景仅用于摄影展示，不与本页太阳系小天体坐标配准。</p>
+    <h4>视觉转译 / VISUAL TRANSLATION</h4>
+    <p>形状、颜色、透明度、空间位置并不等同于 NASA 官方视觉规范；它们是本项目根据真实字段建立的设计编码。</p>
+  </aside>
+
+  <div id="hoverCard" class="hover ui"><small id="hoverGroup"></small><b id="hoverName"></b><span id="hoverMeta"></span></div>
+
+  <div class="vertical-title ui">
+    <strong>宇宙中的<br>小行星分布</strong>
+    <small>ASTEROID DISTRIBUTION<br>IN THE SOLAR SYSTEM</small>
+  </div>
+
+  <div class="left-annotation ui">
+    <div><strong>把遥远之物<br>重新放回星空</strong><small>DATA · SPACE · ORBIT · TIME</small></div>
+  </div>
+
+  <div class="mode-caption ui">
+    <span id="modeIndex">01</span>
+    <div><b id="modeTitle">天象图谱</b><small id="modeSub">ATLAS / 原稿正投影与空间深度</small></div>
+  </div>
+
+  <div class="quality ui">
+    <span>渲染质量 <small>QUALITY</small></span>
+    <div id="qualitySet" class="segmented">
+      <button class="active" data-quality="display">展示</button>
+      <button data-quality="balanced">平衡</button>
+      <button data-quality="photo">摄影</button>
+    </div>
+    <output id="fpsRead">-- FPS</output>
+  </div>
+
+
+  <nav class="scale-nav ui" aria-label="三个信息尺度">
+    <span>观察尺度 <small>OBSERVATION SCALE</small></span>
+    <a class="active" href="index.html?v=earth-r14-20260831"><b>01</b><strong>宇宙</strong><small>COSMIC</small></a>
+    <i></i>
+    <a href="../earth/index.html?v=earth-r14-20260831"><b>02</b><strong>地球</strong><small>EARTH</small></a>
+    <i></i>
+    <a href="../material/index.html?v=material-r14-20260831"><b>03</b><strong>物质</strong><small>MATERIAL</small></a>
+  </nav>
+
+  <div id="wavelengthLegend" class="wavelength-legend ui">
+    <span>观测波段 <small>OBSERVATION BAND</small></span>
+    <div class="wavebar"><i class="uv"></i><i class="visible"></i><i class="ir"></i></div>
+    <div class="wave-labels"><b>紫外<small>UV</small></b><b>可见光<small>VISIBLE</small></b><b>红外<small>INFRARED</small></b></div>
+    <p>同一批天体可在不同观测波段下被重新理解；本层为视觉研究入口，并非实时望远镜数据。</p>
+  </div>
+
+  <footer class="timeline ui">
+    <button id="playBtn" class="play">▶</button>
+    <div class="time-read"><span>轨道推演时间 <small>MODEL TIME · SBDB EPOCH</small></span><b id="timeRead">2025.05.05</b><em>近似二体推演 / NOT HORIZONS EPHEMERIS</em></div>
+    <input id="timeRange" type="range" min="-12" max="12" value="0" step="0.02" />
+    <div id="speedSet" class="speed-set">
+      <button data-speed="1" class="active">1×</button>
+      <button data-speed="12">12×</button>
+      <button data-speed="48">48×</button>
+      <button data-speed="120">120×</button>
+    </div>
+    <button id="photoSettingsBtn" class="photo-settings">摄影设置 <small>PHOTO</small></button>
+    <button id="exposureBtn" class="exposure">时间曝光 <small>EXPOSURE</small></button>
+    <label class="exposure-life">残影 <input id="fadeRange" type="range" min="1" max="100" value="62" /></label>
+    <button id="clearExposure">清空残影</button>
+    <button id="resetBtn">复位</button>
+  </footer>
+
+
+  <div id="chartLightbox" class="chart-lightbox" aria-hidden="true">
+    <button id="chartLightboxClose" aria-label="关闭">×</button>
+    <div class="chart-lightbox-stage">
+      <img id="chartLightboxImage" src="assets/meteorite-chart-01.jpg" alt="原始图表放大图" />
+      <span>滚轮缩放 · 拖动浏览 · ESC 关闭</span>
+    </div>
+  </div>
+
+  <script src="data/real-data.js?v=earth-r14-20260831"></script>
+  <script src="js/app.js?v=earth-r14-20260831"></script>
+</body>
+</html>

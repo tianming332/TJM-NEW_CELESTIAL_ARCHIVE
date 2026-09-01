@@ -1,0 +1,18 @@
+{
+  "status": "stl-live",
+  "source": "8-crystals.stl",
+  "originalName": "8晶体.stl",
+  "format": "binary-stl",
+  "triangleCount": 86056,
+  "separation": "Seven largest gaps between triangle-centroid X positions produce eight left-to-right mesh clusters.",
+  "items": [
+    {"cluster": 1, "id": "isometric", "label": "等轴晶体"},
+    {"cluster": 2, "id": "hexagonal", "label": "六方晶体"},
+    {"cluster": 3, "id": "tetragonal", "label": "四方晶体"},
+    {"cluster": 4, "id": "trigonal", "label": "三方晶体"},
+    {"cluster": 5, "id": "monoclinic", "label": "单斜晶体"},
+    {"cluster": 6, "id": "orthorhombic", "label": "斜方晶体"},
+    {"cluster": 7, "id": "triclinic", "label": "三斜晶体"},
+    {"cluster": 8, "id": "source-square", "label": "正方源模型", "note": "Preserves the eighth source form without presenting it as a standard crystal system."}
+  ]
+}

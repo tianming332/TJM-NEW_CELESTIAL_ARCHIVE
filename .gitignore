@@ -1,0 +1,26 @@
+# Dependencies and caches
+node_modules/
+**/node_modules/
+.npm-cache/
+**/.npm-cache/
+.vite/
+**/.vite/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+Thumbs.db
+.DS_Store
+__pycache__/
+*.pyc
+
+# Editors
+.idea/
+.vscode/
+
+# Local environment
+.env
+.env.*
+!.env.example
