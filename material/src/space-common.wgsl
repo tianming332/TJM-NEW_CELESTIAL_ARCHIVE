@@ -115,7 +115,8 @@ export fn environmentColor(
   let spaceField = spaceColor(direction, lightDirection, showSun, time);
   let captureCards = step(1.5, showSun);
   let cards = studioLightCards(direction) * captureCards;
-  let blackStudio = spaceField + cards;
+  let ambient = vec3f(0.10, 0.13, 0.19) * (0.55 + 0.45 * abs(direction.y));
+  let blackStudio = spaceField + cards + ambient * captureCards;
   let paperStudio = paperTexture(direction) + cards * 0.34;
   return mix(blackStudio, paperStudio, clamp(paperBackground, 0.0, 1.0));
 }

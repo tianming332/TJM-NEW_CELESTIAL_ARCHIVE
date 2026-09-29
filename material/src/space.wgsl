@@ -135,7 +135,8 @@ fn fs_main(@location(0) uvTop: vec2f) -> @location(0) vec4f {
   let environment = environmentColor(direction, space.lightDirection, 0.0, space.time, space.paperBackground);
   let studio = blackStudioField(uv, environment, space.posterColor, space.time);
   var color = mix(studio, environment, clamp(space.paperBackground, 0.0, 1.0));
-  color += prismLightField(uv);
+  // A subdued explanatory diagram, separate from the mesh-traced caustics.
+  color += prismLightField(uv) * select(0.065, 0.32, space.modeIndex > 1.5 && space.modeIndex < 2.5);
   let vignette = 1.0 - smoothstep(0.48, 1.38, length(vec2f(uv.x * 0.72, uv.y)));
   color *= mix(mix(0.62, 0.93, space.paperBackground), 1.0, vignette);
   if (space.modeIndex > 1.5 && space.modeIndex < 2.5) {

@@ -27,7 +27,8 @@ fn acesToneMap(color: vec3f) -> vec3f {
 fn sceneAt(uv: vec2f) -> vec3f {
   let sky = textureSample(skyTexture, sceneSampler, uv);
   let crystal = textureSample(crystalTexture, sceneSampler, uv);
-  return mix(sky.rgb, crystal.rgb, clamp(crystal.a, 0.0, 1.0));
+  // MSAA resolves covered samples into premultiplied color.
+  return sky.rgb * (1.0 - clamp(crystal.a, 0.0, 1.0)) + crystal.rgb;
 }
 
 fn highlightAt(uv: vec2f) -> vec3f {
@@ -37,7 +38,8 @@ fn highlightAt(uv: vec2f) -> vec3f {
 
 @fragment
 fn fs_main(@builtin(position) coord: vec4f, @location(0) uvTop: vec2f) -> @location(0) vec4f {
-  let uv = vec2f(uvTop.x, 1.0 - uvTop.y);
+  // VGPU's fullscreen UVs and WebGPU render textures are both top-left based.
+  let uv = uvTop;
   var color = sceneAt(uv);
   let textureSize = vec2f(textureDimensions(skyTexture));
   let pixel = vec2f(1.0) / max(textureSize, vec2f(1.0));

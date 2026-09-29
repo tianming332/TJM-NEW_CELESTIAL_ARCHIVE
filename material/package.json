@@ -1,13 +1,17 @@
 {
   "name": "new-celestial-archive-material",
   "private": true,
-  "version": "0.14.0",
+  "version": "0.15.0",
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "check:shader": "vgpu check src/crystal.wgsl && vgpu check src/space.wgsl && vgpu check src/composite.wgsl"
+    "check:shader": "node scripts/check-shaders.mjs",
+    "check:types": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "check": "npm run check:types && npm run check:shader && npm test"
   },
   "dependencies": {
+    "meshoptimizer": "1.0.1",
     "vgpu": "0.3.1"
   },
   "devDependencies": {
