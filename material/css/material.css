@@ -100,6 +100,35 @@ body.paper-background .preset-grid button.active,body.paper-background .filter-g
 body.paper-background .source-poster img,body.paper-background .source-catalog img,body.paper-background .explain-grid,body.paper-background .explain-grid div{border-color:rgba(45,39,34,.14)}
 body.paper-background figure figcaption,body.paper-background .explain-grid span{color:#6c645e}
 
+/* Keep the entire bottom control deck light, including the mobile layout. */
+html[data-tjm-ui="celestial"] body.paper-background .control-deck{
+  color:#211e1b;background:#fff;border-color:rgba(45,39,34,.20);
+  box-shadow:0 -8px 28px rgba(40,34,29,.06);
+}
+body.paper-background .control-deck>button{
+  color:#211e1b;background:#fff;border-color:rgba(45,39,34,.20);
+}
+body.paper-background .control-deck>button:hover,
+body.paper-background .control-deck>button:focus-visible{
+  background:#f1f6f8;border-color:#397f9a;
+}
+body.paper-background .control-deck .play.active{
+  background:#edf5f8;border-color:#397f9a;
+}
+body.paper-background .control-deck .deck-title span{color:#28231f}
+body.paper-background .control-deck .deck-title b{color:#276e89}
+body.paper-background .control-deck .deck-title small,
+body.paper-background .control-deck>button small,
+body.paper-background .control-deck label span{color:#665f59}
+body.paper-background .control-deck label output{color:#28231f}
+body.paper-background .control-deck input[type=range]{background:linear-gradient(90deg,#286f8b,#9bbbc8)}
+body.paper-background .control-deck input[type=range]::-webkit-slider-thumb{
+  background:#286f8b;box-shadow:0 0 0 2px #fff;
+}
+body.paper-background .control-deck input[type=range]::-moz-range-thumb{
+  width:9px;height:9px;border:0;border-radius:50%;background:#286f8b;box-shadow:0 0 0 2px #fff;
+}
+
 /* R15: optical controls preserve the original instrument layout. */
 .render-quality{margin-top:24px;padding-top:4px;border-top:1px solid var(--line-soft)}
 .quality-options{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -143,7 +172,8 @@ button:focus-visible,input:focus-visible{outline:2px solid #7db9d2;outline-offse
 .material-story { min-width:0; }
 body.hide-story #materialStory,
 body.hide-type-summary #focusToggle,
-body.hide-type-list #typeRail { display:none!important; }
+body.hide-type-list #typeRail,
+body.hide-inspector #materialInspector { display:none!important; }
 .stage-copy.all-content-hidden { background:none!important;pointer-events:none; }
 #rendererNotice[hidden] { display:none; }
 .renderer-notice { padding:12px;border:1px solid rgba(226,175,92,.3);border-radius:10px;background:rgba(226,175,92,.06);color:#d9c3a2!important;font-size:11px!important;line-height:1.75; }

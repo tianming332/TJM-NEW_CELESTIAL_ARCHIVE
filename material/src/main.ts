@@ -8,16 +8,8 @@ import causticSplatShader from "./caustic-splat.wgsl";
 import { parseStlMeshes, type StlMesh } from "./stl";
 import { buildMeshBvh, opticalMesh, type MeshBvh } from "./mesh-bvh";
 import { fallbackMesh, projectFallbackMesh } from "./fallback-mesh";
+import { crystalTypes, type Lang } from "./crystal-types";
 
-type Lang = "zh" | "ja" | "en";
-type CrystalType = {
-  id: string;
-  code: string;
-  label: Record<Lang, string>;
-  color: string;
-  shape: string;
-  source: string;
-};
 type Mineral = {
   name: string;
   cn: string;
@@ -33,17 +25,6 @@ type Mineral = {
 
 const $ = <T extends Element>(selector: string) => document.querySelector<T>(selector)!;
 const $$ = <T extends Element>(selector: string) => [...document.querySelectorAll<T>(selector)];
-
-const crystalTypes: CrystalType[] = [
-  { id: "isometric", code: "ISOMETRIC", label: { zh: "等轴晶体", ja: "等軸晶系", en: "Isometric" }, color: "#8b60c8", shape: "polygon(50% 0,100% 50%,50% 100%,0 50%)", source: "8晶体.stl · CLUSTER 01" },
-  { id: "hexagonal", code: "HEXAGONAL", label: { zh: "六方晶体", ja: "六方晶系", en: "Hexagonal" }, color: "#52a9d5", shape: "polygon(25% 7%,75% 7%,100% 50%,75% 93%,25% 93%,0 50%)", source: "8晶体.stl · CLUSTER 02" },
-  { id: "tetragonal", code: "TETRAGONAL", label: { zh: "四方晶体", ja: "正方晶系", en: "Tetragonal" }, color: "#4e6fc7", shape: "polygon(16% 0,84% 0,100% 100%,0 100%)", source: "8晶体.stl · CLUSTER 03" },
-  { id: "trigonal", code: "TRIGONAL", label: { zh: "三方晶体", ja: "三方晶系", en: "Trigonal" }, color: "#f0c635", shape: "polygon(50% 0,100% 100%,0 100%)", source: "8晶体.stl · CLUSTER 04" },
-  { id: "monoclinic", code: "MONOCLINIC", label: { zh: "单斜晶体", ja: "単斜晶系", en: "Monoclinic" }, color: "#d95b5f", shape: "polygon(28% 0,100% 0,72% 100%,0 100%)", source: "8晶体.stl · CLUSTER 05" },
-  { id: "orthorhombic", code: "ORTHORHOMBIC", label: { zh: "斜方晶体", ja: "斜方晶系", en: "Orthorhombic" }, color: "#47aa51", shape: "polygon(18% 8%,82% 0,100% 92%,36% 100%,0 60%)", source: "8晶体.stl · CLUSTER 06" },
-  { id: "triclinic", code: "TRICLINIC", label: { zh: "三斜晶体", ja: "三斜晶系", en: "Triclinic" }, color: "#9da43e", shape: "polygon(24% 0,100% 24%,76% 100%,0 76%)", source: "8晶体.stl · CLUSTER 07" },
-  { id: "source-square", code: "SOURCE SQUARE", label: { zh: "正方源模型", ja: "正方ソース形状", en: "Source Square" }, color: "#a3684f", shape: "polygon(14% 0,86% 0,100% 20%,88% 100%,12% 100%,0 20%)", source: "8晶体.stl · CLUSTER 08" },
-];
 
 const names = [
   "HEXAGONAL DIAMOND","CARLSBERGITE","BARRINGERITE","OSBORNITE","BREZINAITE","NININGERITE","HEIDEITE","DAUBREELITE","OLDHAMITE","ROEDDERITE",
@@ -167,6 +148,9 @@ Object.assign(copy.en, {layerCaustics:"Refracted caustics",layerRays:"Spectrum d
 Object.assign(copy.zh, {layerStory:"左侧介绍",layerTypeSummary:"当前晶体名称",layerTypeList:"晶体选择列表",rendererFallback:"兼容预览：当前未启用 WebGPU，使用完整简化网格显示晶体；不模拟同等级的折射与焦散。可点击下方按钮重试。",rendererBasic:"兼容预览测试模式。点击下方按钮可尝试启用 WebGPU。",rendererLoadError:"晶体模型未能加载，请检查网络或本地服务后重试。"});
 Object.assign(copy.ja, {layerStory:"左側の紹介",layerTypeSummary:"選択中の結晶名",layerTypeList:"結晶の選択リスト",rendererFallback:"互換プレビュー：WebGPUが利用できないため、完全な簡略メッシュを表示しています。同等の屈折・集光は再現しません。下のボタンで再試行できます。",rendererBasic:"互換プレビューのテストモードです。下のボタンでWebGPUを再試行できます。",rendererLoadError:"結晶モデルを読み込めません。接続またはローカルサーバーを確認してください。"});
 Object.assign(copy.en, {layerStory:"Left introduction",layerTypeSummary:"Current crystal name",layerTypeList:"Crystal selector",rendererFallback:"Compatibility preview: WebGPU is not active. The complete simplified mesh is shown, without equivalent refraction or caustics. Retry below.",rendererBasic:"Compatibility preview test mode. Retry below to enable WebGPU.",rendererLoadError:"The crystal model could not load. Check the connection or local server and retry."});
+Object.assign(copy.zh, {layerInspector:"当前选中卡片"});
+Object.assign(copy.ja, {layerInspector:"選択中の標本カード"});
+Object.assign(copy.en, {layerInspector:"Selected material card"});
 
 const modeUi: Record<Lang, Record<string, string>> = {
   zh: {sampleTitle:"真实样本",sampleBody:"当前矿物使用对应的 STL 晶体网格，拖动观察晶面，滚轮改变距离。",compositionTitle:"成分关系",compositionBody:"相同晶系的矿物被归为一组；颜色来自原海报的分类色相。",spectrumTitle:"光谱响应",spectrumBody:"波长与色散共同改变穿过晶体的光，不改变矿物名称和类别。",crystalTitle:"八个 STL 网格",crystalBody:"点击下方任一网格，直接切换 8晶体.stl 中对应的空间分组。",compareTitle:"并置比较",compareBody:"左侧为当前选择，右侧为已固定样本；两者使用同一个画外光源。",triangles:"三角面",sameType:"同晶系",source:"模型源",slotA:"当前 A",slotB:"固定 B",loading:"正在解析 STL…"},
@@ -497,16 +481,17 @@ function syncContentLayers() {
     ["story", "#materialStory"],
     ["type-summary", "#focusToggle"],
     ["type-list", "#typeRail"],
+    ["inspector", "#materialInspector"],
   ] as const;
   panels.forEach(([layer, selector]) => {
     const enabled = !document.body.classList.contains(`hide-${layer}`);
     const target = $<HTMLElement>(selector);
-    target.inert = !enabled || (layer === "type-list" && state.focusMode);
+    target.inert = !enabled || ((layer === "type-list" || layer === "inspector") && state.focusMode);
     target.setAttribute("aria-hidden", String(target.inert));
   });
-  $<HTMLElement>("#materialInspector").inert = state.focusMode;
   $<HTMLElement>(".stage-copy").classList.toggle("all-content-hidden",
-    panels.every(([layer]) => document.body.classList.contains(`hide-${layer}`)));
+    panels.filter(([layer]) => layer !== "inspector")
+      .every(([layer]) => document.body.classList.contains(`hide-${layer}`)));
 }
 
 function setFocusMode(enabled: boolean) {
@@ -546,9 +531,9 @@ function bindUi() {
     button.classList.toggle("active"); const layer = (button as HTMLElement).dataset.layer!;
     button.setAttribute("aria-pressed",String(button.classList.contains("active")));
     document.body.classList.toggle(`hide-${layer}`,!button.classList.contains("active"));
-    // An explicit "show list" request overrides the older quick-focus collapse.
-    if(layer==="type-list"&&button.classList.contains("active")&&state.focusMode) setFocusMode(false);
-    if (["story","type-summary","type-list"].includes(layer)) syncContentLayers();
+    // Explicitly showing either panel overrides quick-focus, but preserves other layer choices.
+    if((layer==="type-list"||layer==="inspector")&&button.classList.contains("active")&&state.focusMode) setFocusMode(false);
+    if (["story","type-summary","type-list","inspector"].includes(layer)) syncContentLayers();
     if(layer==="rays") { state.raysEnabled=button.classList.contains("active")?1:0; sendMaterialState(); }
     if(layer==="caustics") { state.causticsEnabled=button.classList.contains("active")?1:0; sendMaterialState(); }
     if(layer==="optics") { state.opticsEnabled=button.classList.contains("active")?1:0; sendMaterialState(); }
@@ -903,7 +888,7 @@ document.addEventListener("visibilitychange",()=>{
 addEventListener("pageshow",recoverCanvasAfterMove);
 addEventListener("focus",recoverCanvasAfterMove);
 
-buildTypeControls();buildMineralRing();bindUi();document.body.dataset.uiSize=state.size;applyLanguage(state.lang);selectMineral(DEFAULT_MINERAL);fitMineralRing();void startRenderer();
+buildTypeControls();buildMineralRing();bindUi();syncContentLayers();document.body.dataset.uiSize=state.size;applyLanguage(state.lang);selectMineral(DEFAULT_MINERAL);fitMineralRing();void startRenderer();
 $("#playBtn").classList.toggle("active",state.autoRotate>0);
 $("#playBtn b").textContent=state.autoRotate>0?"Ⅱ":"▶";
 
